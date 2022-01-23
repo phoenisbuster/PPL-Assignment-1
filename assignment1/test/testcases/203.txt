@@ -1,0 +1,7 @@
+
+Class Shape {
+    $getNumOfShape
+        Return Self.length * Self.width;
+    }
+}
+        
