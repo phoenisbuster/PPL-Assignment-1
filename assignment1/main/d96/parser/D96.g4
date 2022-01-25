@@ -211,11 +211,11 @@ FLOATLIT: INTERGER_PART ( FRACTION | EXPONENT | FRACTION EXPONENT )
 BOOLEANLIT: BooleanTrue | BooleanFalse;
 
 // For string litteral
-STRINGLIT:  '"' ('\'"')* ( ESC_SEQ | ~[\\"\r\n] )* ('\'"')* '"' EOF?;
+STRINGLIT:  '"' ('\'"')* ( ESC_SEQ | ~[\\"\r\n] )* ('\'"')* '"';
 fragment ESC_SEQ:   '\\' ('b'|'f'|'r'|'n'|'t'|'\''|'\\');
 
 //For Error in string
-UNCLOSE_STRING: '"' ('\'"')* ( ESC_SEQ | ~[\\"\r\n] )* ('\'"')* EOF? 
+UNCLOSE_STRING: '"' ('\'"')* ( ESC_SEQ | ~[\\"\r\n] )* ('\'"')* 
 {
 	self.text = self.text.replace('"','',1)
 	raise UncloseString(self.text) 

@@ -18,8 +18,8 @@ class LexerSuite(unittest.TestCase):
     def test_string(self):
         """test string"""
         self.assertTrue(TestLexer.test("ab?svn","ab,Error Token ?",105))
-    def test_integer(self):
+    def test_another_integer(self):
         """test another integer"""
         input = """ "abc def  """
-        expect = "Unclosed String: abc def"
+        expect = "Unclosed String: abc def  "
         self.assertTrue(TestLexer.test(input,expect,106))
