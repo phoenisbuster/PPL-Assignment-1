@@ -149,6 +149,21 @@ class D96Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by D96Parser#member_access_out.
+    def visitMember_access_out(self, ctx:D96Parser.Member_access_outContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by D96Parser#member_access_in.
+    def visitMember_access_in(self, ctx:D96Parser.Member_access_inContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by D96Parser#self_word.
+    def visitSelf_word(self, ctx:D96Parser.Self_wordContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by D96Parser#index_expr.
     def visitIndex_expr(self, ctx:D96Parser.Index_exprContext):
         return self.visitChildren(ctx)

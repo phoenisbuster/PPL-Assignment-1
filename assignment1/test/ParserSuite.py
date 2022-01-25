@@ -24,10 +24,10 @@ Class Rectangle: Shape {
         """Miss ( {"""
         input = """
 Class Shape {
-    $getNumOfShape
+    $getNumOfShape( {
         Return Self.length * Self.width;
     }
 }
         """
-        expect = "Error on line 3 col 24: {"
+        expect = "Error on line 3 col 20: {"
         self.assertTrue(TestParser.test(input,expect,203))

@@ -1,6 +1,6 @@
 
 Class Shape {
-    $getNumOfShape
+    $getNumOfShape( {
         Return Self.length * Self.width;
     }
 }

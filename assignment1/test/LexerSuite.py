@@ -12,14 +12,14 @@ class LexerSuite(unittest.TestCase):
         self.assertTrue(TestLexer.test("aAsVN3","aAsVN3,<EOF>",103))
     def test_integer(self):
         """test integers"""
-        input = """ "abc\h def" """
+        input = """ "abc\\h def"  """
         expect = "Illegal Escape In String: abc\h"
         self.assertTrue(TestLexer.test(input,expect,104))
     def test_string(self):
-        """test integers"""
+        """test string"""
         self.assertTrue(TestLexer.test("ab?svn","ab,Error Token ?",105))
     def test_integer(self):
-        """test integers"""
-        input = """ "abc def """
+        """test another integer"""
+        input = """ "abc def  """
         expect = "Unclosed String: abc def"
         self.assertTrue(TestLexer.test(input,expect,106))

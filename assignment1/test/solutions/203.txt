@@ -1,1 +1,1 @@
-Error on line 2 col 0: Class
+Error on line 3 col 20: {

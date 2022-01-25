@@ -11,7 +11,8 @@ options {
 program: many_class_decl EOF;
 many_class_decl: class_decl class_decl_list;
 class_decl_list: (class_decl class_decl_list)?;
-class_decl: 'Class' (ID|Program) (':'(ID|Program))? LB member_lists RB;
+class_decl: Class_word (ID|Program) (':'(ID|Program))? LB member_lists RB;
+Class_word: Class;
 
 member_lists: (member member_list_tail)?;
 member_list_tail: (member member_list_tail)?;
@@ -43,15 +44,20 @@ expr_list_tail: (COMA expr expr_list_tail)?;
 
 expr: 
 class_expr 
-| ID MEMBER_ACCESS_OUT '$'?ID (LP expr_list RP)?
-| ID DOT '$'?ID (LP expr_list RP)?
+| member_access_out
+| member_access_in
 | index_expr
 | math_expr
 | relational_expr
 | string_expr
 | ID;
 
+
 class_expr: <assoc=right> KEYWORD_New ID LP expr_list RP;
+
+member_access_out: ID MEMBER_ACCESS_OUT '$'?ID (LP expr_list RP)?;
+member_access_in: (ID | self_word) DOT '$'?ID (LP expr_list RP)?;
+self_word: Self;
 
 index_expr: lower_expr index_operators;
 index_operators: LB lower_expr RB
@@ -65,25 +71,25 @@ math_expr:
 | math_expr MUL_OP math_expr | math_expr DIV_OP math_expr | mod_expr
 | math_expr ADD_OP math_expr | math_expr SUB_OP math_expr
 | logical_expr
-| INTLIT | FLOATLIT | ID;
+| member_access_out | member_access_in | INTLIT | FLOATLIT | ID;
 
 mod_expr: mod_expr MOD_OP mod_expr 
-| INTLIT | ID;
+| member_access_out | member_access_in | INTLIT | ID;
 
 logical_not_expr: <assoc=right> NOT_OP logical_not_expr
-| BOOLEANLIT | ID;
+| member_access_out | member_access_in | BOOLEANLIT | ID;
 
 logical_expr: logical_expr AND_OP logical_expr | logical_expr OR_OP logical_expr
-| BOOLEANLIT | ID;
+| member_access_out | member_access_in | BOOLEANLIT | ID;
 
 relational_expr: relational_expr_1 | relational_expr_2;
 relational_expr_1: relational_expr_1 (EQUAL_OP | DIFF_OP ) relational_expr_1 
-| INTLIT | BOOLEANLIT | ID;
+| member_access_out | member_access_in | INTLIT | BOOLEANLIT | ID;
 relational_expr_2: relational_expr_2 (GREATER_OP | LESSER_OP | GREATER_EQUAL_OP | LESSER_EQUAL_OP) relational_expr_2
-| INTLIT | FLOATLIT | ID;
+| member_access_out | member_access_in | INTLIT | FLOATLIT | ID;
 
 string_expr: string_expr (STRING_COMP_OP | STRING_CONCAT_OP) string_expr
-| STRINGLIT | ID;
+| member_access_out | member_access_in | STRINGLIT | ID;
 
 block_stmt: LB block_stmt_list RB;
 block_stmt_list: (stmt block_stmt_list_tail)?;
@@ -118,7 +124,8 @@ loop_stmt: Foreach LP ID In expr '..' expr (By expr)? RP block_stmt;
 
 call: ID LB expr_list RB;
 
-return_stmt: Return (expr)?;
+return_stmt: Return_word (expr)?;
+Return_word: Return;
 
 //Block comment
 BLOCKCOMMENT: '##' .*? '##' -> skip;
@@ -206,6 +213,15 @@ BOOLEANLIT: BooleanTrue | BooleanFalse;
 // For string litteral
 STRINGLIT:  '"' ('\'"')* ( ESC_SEQ | ~[\\"\r\n] )* ('\'"')* '"' EOF?;
 fragment ESC_SEQ:   '\\' ('b'|'f'|'r'|'n'|'t'|'\''|'\\');
+
+//For Error in string
+UNCLOSE_STRING: '"' ('\'"')* ( ESC_SEQ | ~[\\"\r\n] )* ('\'"')* EOF? 
+{
+	self.text = self.text.replace('"','',1)
+	raise UncloseString(self.text) 
+
+};
+fragment ILL_ESC_SEQ: ('\\' ~([bfnrt\\] | '\'') ) | UNICODE_ESC | OCTAL_ESC;
 fragment OCTAL_ESC:   '\\' ('0'..'3') ('0'..'7') ('0'..'7')
     |   '\\' ('0'..'7') ('0'..'7')
     |   '\\' ('0'..'7');
@@ -213,6 +229,12 @@ fragment OCTAL_ESC:   '\\' ('0'..'3') ('0'..'7') ('0'..'7')
 fragment UNICODE_ESC:   '\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT ;
 
 fragment HEX_DIGIT : ('0'..'9'|'a'..'f'|'A'..'F') ; 
+ILLEGAL_ESCAPE: '"' ('\'"')* (~["\\\r\n] | ESC_SEQ | '\'"')* ILL_ESC_SEQ
+{
+	self.text = self.text.replace('"','',1)
+	raise IllegalEscape(self.text) 
+};
+
 
 // For arrays in array
 multi_ArrayLIT: Array LP array_list RP;
@@ -241,10 +263,8 @@ DOT: '.';
 COMA: ',';
 
 WS: [ \t\b\f\r\n]+ -> skip; // skip blanks, tabs, backspaces, form feed, carriage return, newline
+//WS: [ \t\r\n] -> skip;
 
 
-UNCLOSE_STRING: '"' ('\'"')* ( ESC_SEQ | ~[\\"\r\n] )* ('\'"')* EOF? {raise UncloseString(self.text) };
-fragment ILL_ESC_SEQ: '\\' ('h') | UNICODE_ESC | OCTAL_ESC;
-ILLEGAL_ESCAPE: '"' ('\'"')* ( ILL_ESC_SEQ | ~[\\"\r\n] )* ('\'"')* '"' EOF? {raise IllegalEscape(self.text) };
 //UNTERMINATED_COMMENT: '##' .*? EOF { raise UnterminatedComment(self.text) }; //This is removed from assignment requirement
 ERROR_CHAR: . { raise ErrorToken(self.text) };

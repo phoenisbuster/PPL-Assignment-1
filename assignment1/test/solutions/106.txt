@@ -1,1 +1,1 @@
-Unclosed String: "abc def 
+Unclosed String: abc def  
