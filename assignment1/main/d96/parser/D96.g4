@@ -52,7 +52,6 @@ class_expr
 | string_expr
 | ID;
 
-
 class_expr: <assoc=right> KEYWORD_New ID LP expr_list RP;
 
 member_access_out: ID MEMBER_ACCESS_OUT '$'?ID (LP expr_list RP)?;
@@ -127,11 +126,95 @@ call: ID LB expr_list RB;
 return_stmt: Return_word (expr)?;
 Return_word: Return;
 
+/////////////////// Lexer Rules//////////////////////
+
 //Block comment
 BLOCKCOMMENT: '##' .*? '##' -> skip;
 
+//Describe Interger Literal
+INTLIT: (DECIMAL | OCTAL | HEX | BIN)
+{	
+	self.text = self.text.replace('_','')
+	print("Int: ", self.text)
+};
+fragment DECIMAL: ('0') | ([1-9]([0-9_]*[0-9_]+)*);
+fragment OCTAL: '0'[0-7]+;
+fragment HEX: '0'[xX][a-fA-F0-9]+;
+fragment BIN: '0'[bB][01]+;
+
+
+// For Floating point number
+FLOATLIT: INTERGER_PART ( FRACTION | EXPONENT | FRACTION EXPONENT ) 
+{
+	self.text = self.text.replace('_','')
+	print("Float: ", self.text)
+};
+fragment INTERGER_PART: DECIMAL;
+fragment EXPONENT: [eE][+-]? INTERGER_PART; 
+fragment FRACTION: (DOT INTERGER_PART)?; 
+
+
+// For Boolean literal
+BOOLEANLIT: BooleanTrue | BooleanFalse
+{
+	print("Bool: ", self.text)
+};
+
+// For string litteral
+STRINGLIT:  '"' ( ESC_SEQ | (~[\\"\r\n]) | ('\'"'))* '"'
+{
+	print("String: ", self.text)
+};
+
+//For Error in string
+UNCLOSE_STRING: '"' ('\'"')* ( ESC_SEQ | ~[\\"\r\n] )* ('\'"')* 
+{
+	self.text = self.text.replace('"','',1)
+	raise UncloseString(self.text) 
+
+};
+ILLEGAL_ESCAPE: '"' ('\'"')* (~["\\\r\n] | ESC_SEQ | '\'"')* ILL_ESC_SEQ
+{
+	self.text = self.text.replace('"','',1)
+	raise IllegalEscape(self.text) 
+};
+//fragment for string literals
+fragment ESC_SEQ:   '\\' ('b'|'f'|'r'|'n'|'t'|'\''|'\\');
+fragment ILL_ESC_SEQ: ('\\' ~([bfnrt\\] | '\'') ) | UNICODE_ESC | OCTAL_ESC;
+fragment OCTAL_ESC:   '\\' ('0'..'3') ('0'..'7') ('0'..'7')
+    |   '\\' ('0'..'7') ('0'..'7')
+    |   '\\' ('0'..'7');
+
+fragment UNICODE_ESC:   '\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT ;
+
+fragment HEX_DIGIT : ('0'..'9'|'a'..'f'|'A'..'F') ; 
+
+
+// For arrays in array
+multi_ArrayLIT: Array_word LP array_list RP;
+Array_word: Array;
+array_list: (arrayLIT array_list_tail)?;
+array_list_tail: (COMA arrayLIT array_list_tail)?;
+// For indexed array
+ 
+arrayLIT: Array_word LP elements RP;
+elements: (ele_int_list) | (ele_float_list) | (ele_bool_list) | (ele_str_list);
+ele_int_list: (INTLIT ele_int_list_tail)?;
+ele_int_list_tail: (COMA INTLIT ele_int_list_tail)?;
+ele_float_list: (FLOATLIT ele_float_list_tail)?;
+ele_float_list_tail: (COMA FLOATLIT ele_float_list_tail)?;
+ele_bool_list: (BOOLEANLIT ele_bool_list_tail)?;
+ele_bool_list_tail: (COMA BOOLEANLIT ele_bool_list_tail)?;
+ele_str_list: (STRINGLIT ele_str_list_tail)?;
+ele_str_list_tail: (COMA STRINGLIT ele_str_list_tail)?;
+//element_list: (elements elements_tail)?;
+//elements_tail: (COMA elements elements_tail)?;
+
 //Identifiers
-ID: [a-zA-Z_][a-zA-Z0-9_]*;
+ID: [a-zA-Z_][a-zA-Z0-9_]*
+{
+	print("ID: ", self.text)
+};
 
 //These fragments for Keywords and other uses
 Program: 'Program';
@@ -188,64 +271,6 @@ STRING_CONCAT_OP: '+.';
 //MEMBER_ACCESS_IN: '.'; //Can be presented by dot in Special Character
 MEMBER_ACCESS_OUT: '::';
 
-//Describe Interger Literal
-fragment DECIMAL: ('0') | ([1-9]([0-9]*('_'?)[0-9]+)*);
-fragment OCTAL: '0'[0-7]+;
-fragment HEX: '0'[xX][a-fA-F0-9]+;
-fragment BIN: '0'[bB][01]+;
-INTLIT: DECIMAL | OCTAL | HEX | BIN
-{
-	self.text = self.text.replace("_","")
-};
-
-// For Floating point number
-fragment INTERGER_PART: DECIMAL;
-fragment EXPONENT: [eE][+-]? INTERGER_PART; 
-fragment FRACTION: (DOT INTERGER_PART)?; 
-FLOATLIT: INTERGER_PART ( FRACTION | EXPONENT | FRACTION EXPONENT ) 
-{
-	self.text = self.text.replace("_","")
-};
-
-// For Boolean literal
-BOOLEANLIT: BooleanTrue | BooleanFalse;
-
-// For string litteral
-STRINGLIT:  '"' ('\'"')* ( ESC_SEQ | ~[\\"\r\n] )* ('\'"')* '"';
-fragment ESC_SEQ:   '\\' ('b'|'f'|'r'|'n'|'t'|'\''|'\\');
-
-//For Error in string
-UNCLOSE_STRING: '"' ('\'"')* ( ESC_SEQ | ~[\\"\r\n] )* ('\'"')* 
-{
-	self.text = self.text.replace('"','',1)
-	raise UncloseString(self.text) 
-
-};
-fragment ILL_ESC_SEQ: ('\\' ~([bfnrt\\] | '\'') ) | UNICODE_ESC | OCTAL_ESC;
-fragment OCTAL_ESC:   '\\' ('0'..'3') ('0'..'7') ('0'..'7')
-    |   '\\' ('0'..'7') ('0'..'7')
-    |   '\\' ('0'..'7');
-
-fragment UNICODE_ESC:   '\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT ;
-
-fragment HEX_DIGIT : ('0'..'9'|'a'..'f'|'A'..'F') ; 
-ILLEGAL_ESCAPE: '"' ('\'"')* (~["\\\r\n] | ESC_SEQ | '\'"')* ILL_ESC_SEQ
-{
-	self.text = self.text.replace('"','',1)
-	raise IllegalEscape(self.text) 
-};
-
-
-// For arrays in array
-multi_ArrayLIT: Array LP array_list RP;
-array_list: (index_ArrayLIT array_list_tail)?;
-array_list_tail: (COMA index_ArrayLIT array_list_tail)?;
-// For indexed array
-index_ArrayLIT: Array elements;
-elements: LP element_list RP;
-element_list: (expr elements_tail)?;
-elements_tail: (COMA expr elements_tail)?;
-
 //These tokens for Special Character
 LP: '(';
 RP: ')';
@@ -263,8 +288,6 @@ DOT: '.';
 COMA: ',';
 
 WS: [ \t\b\f\r\n]+ -> skip; // skip blanks, tabs, backspaces, form feed, carriage return, newline
-//WS: [ \t\r\n] -> skip;
-
 
 //UNTERMINATED_COMMENT: '##' .*? EOF { raise UnterminatedComment(self.text) }; //This is removed from assignment requirement
 ERROR_CHAR: . { raise ErrorToken(self.text) };

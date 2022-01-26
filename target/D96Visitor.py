@@ -329,25 +329,5 @@ class D96Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by D96Parser#index_ArrayLIT.
-    def visitIndex_ArrayLIT(self, ctx:D96Parser.Index_ArrayLITContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by D96Parser#elements.
-    def visitElements(self, ctx:D96Parser.ElementsContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by D96Parser#element_list.
-    def visitElement_list(self, ctx:D96Parser.Element_listContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by D96Parser#elements_tail.
-    def visitElements_tail(self, ctx:D96Parser.Elements_tailContext):
-        return self.visitChildren(ctx)
-
-
 
 del D96Parser
