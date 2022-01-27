@@ -1,1 +1,1 @@
-1234.567,<EOF>
+This is a string containing NOTHING,<EOF>

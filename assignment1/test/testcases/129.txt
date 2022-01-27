@@ -1,0 +1,1 @@
+schedule(an_expression, sc_time [, sc_cycle]) (sc)

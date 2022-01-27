@@ -11,26 +11,26 @@ options {
 program: many_class_decl EOF;
 many_class_decl: class_decl class_decl_list;
 class_decl_list: (class_decl class_decl_list)?;
-class_decl: Class_word (ID|Program) (':'(ID|Program))? LB member_lists RB;
-Class_word: Class;
+class_decl: Class_word (ID|PROGRAM) (':'(ID|PROGRAM))? LB member_lists RB;
+Class_word: CLASS;
 
 member_lists: (member member_list_tail)?;
 member_list_tail: (member member_list_tail)?;
 member: attributes | methods;
 
-attributes: (Val|Var) attribute_list ':' types ('=' expr_list)? SEMI;
+attributes: (VAL|VAR) attribute_list ':' types ('=' expr_list)? SEMI;
 attribute_list: attribute_name attribute_list_tail;
 attribute_list_tail: (attribute_name attribute_list_tail)?;
 attribute_name: '$'?ID;
 
 types: primitive_Type | array_Type | class_type;
-primitive_Type: Boolean | Int | Float | String;
-array_Type: Array LSB (element_type COMA array_size)? RSB; 
+primitive_Type: BOOL | INT | FLOAT | STR;
+array_Type: ARRAY LSB (element_type COMA array_size)? RSB; 
 element_type: primitive_Type | array_Type;
 array_size: INTLIT;
 class_type: ID;
 
-methods: '$'?(ID|Main|Constructor|Destructor) param block_stmt;
+methods: '$'?(ID|MAIN|CONS|DEST) param block_stmt;
 param: LP paramlist RP;
 paramlist: (param_decl paramlist_tail)?;
 paramlist_tail: (SEMI param_decl paramlist_tail)?;
@@ -52,11 +52,11 @@ class_expr
 | string_expr
 | ID;
 
-class_expr: <assoc=right> KEYWORD_New ID LP expr_list RP;
+class_expr: <assoc=right> KEYWORD_NEW ID LP expr_list RP;
 
 member_access_out: ID MEMBER_ACCESS_OUT '$'?ID (LP expr_list RP)?;
 member_access_in: (ID | self_word) DOT '$'?ID (LP expr_list RP)?;
-self_word: Self;
+self_word: SELF;
 
 index_expr: lower_expr index_operators;
 index_operators: LB lower_expr RB
@@ -95,9 +95,9 @@ block_stmt_list: (stmt block_stmt_list_tail)?;
 block_stmt_list_tail: (stmt block_stmt_list_tail)?;
 
 stmt: stmt_list SEMI;
-stmt_list: var_cons_decl | asm | if_stmt | loop_stmt | Break | Continue | return_stmt;
+stmt_list: var_cons_decl | asm | if_stmt | loop_stmt | BREAK | CONT | return_stmt;
 
-var_cons_decl: (Val|Var) var_cons_list ':' types ('=' expr_list)? SEMI;
+var_cons_decl: (VAL|VAR) var_cons_list ':' types ('=' expr_list)? SEMI;
 var_cons_list: var_cons_name var_cons_list_tail;
 var_cons_list_tail: (var_cons_name var_cons_list_tail)?;
 var_cons_name: ID;
@@ -106,25 +106,25 @@ asm: (ID | index_expr) ASSIGN_OP expr;
 
 if_stmt : matchStmt
 | unmatchStmt;
-matchStmt: If expr matchStmt
+matchStmt: IF expr matchStmt
 (elseif_list)
-(Else matchStmt)?
+(ELSE matchStmt)?
 | block_stmt;
-unmatchStmt: If expr if_stmt
-| If expr matchStmt
+unmatchStmt: IF expr if_stmt
+| IF expr matchStmt
 (elseif_list)
-(Else unmatchStmt)?;
+(ELSE unmatchStmt)?;
 
 elseif_list: (elseif_stmt elseif_list_tail)?;
 elseif_list_tail: (elseif_stmt elseif_list_tail)?;
-elseif_stmt: Elseif if_stmt;
+elseif_stmt: ELSEIF if_stmt;
 
-loop_stmt: Foreach LP ID In expr '..' expr (By expr)? RP block_stmt;
+loop_stmt: FOREACH LP ID IN expr '..' expr (BY expr)? RP block_stmt;
 
 call: ID LB expr_list RB;
 
 return_stmt: Return_word (expr)?;
-Return_word: Return;
+Return_word: RETURN;
 
 /////////////////// Lexer Rules//////////////////////
 
@@ -135,16 +135,10 @@ BLOCKCOMMENT: '##' .*? '##' -> skip;
 INTLIT: (DECIMAL | OCTAL | HEX | BIN)
 {	
 	self.text = self.text.replace('_','')
-	print("Int: ", self.text)
 };
-fragment DECIMAL: ('0') | ([1-9]([0-9_]*[0-9_]+)*);
-fragment OCTAL: '0'[0-7]+;
-fragment HEX: '0'[xX][a-fA-F0-9]+;
-fragment BIN: '0'[bB][01]+;
-
 
 // For Floating point number
-FLOATLIT: INTERGER_PART ( FRACTION | EXPONENT | FRACTION EXPONENT ) 
+FLOATLIT: INTERGER_PART (FRACTION  | EXPONENT | FRACTION EXPONENT)
 {
 	self.text = self.text.replace('_','')
 	print("Float: ", self.text)
@@ -153,34 +147,58 @@ fragment INTERGER_PART: DECIMAL;
 fragment EXPONENT: [eE][+-]? INTERGER_PART; 
 fragment FRACTION: (DOT INTERGER_PART)?; 
 
+fragment DECIMAL: ('0') | ([1-9]([0-9]*'_'?[0-9]+)*);
+fragment OCTAL: '0'[0-7_]+;
+fragment HEX: '0'[xX][a-fA-F0-9_]+;
+fragment BIN: '0'[bB][01_]+;
+
 
 // For Boolean literal
-BOOLEANLIT: BooleanTrue | BooleanFalse
-{
-	print("Bool: ", self.text)
-};
+BOOLEANLIT: BOOLTRUE | BOOLFALSE;
 
 // For string litteral
-STRINGLIT:  '"' ( ESC_SEQ | (~[\\"\r\n]) | ('\'"'))* '"'
+STRINGLIT:  '"' ('\'"')* ( ESC_SEQ | ~["] | ('\'"'))* ('\'"')* '"' //'"' ( ESC_SEQ | (~[\\"]) | ('\'"'))* '"'
 {
-	print("String: ", self.text)
+	s = ""
+	check = False;
+	for i in range(len(self.text)):
+		s += self.text[i]
+		a = ''
+		if(i == len(self.text)-1): a = ''
+		else: a = self.text[i+1]
+		b = ((a != 'b') and  (a != 'f') and  (a != 'r') and  (a != 'n') and  (a != 't') and (a != '\'') and  (a != '"') and (a != '\\'))
+		if(self.text[i] == '\\' and b == True):
+			s += self.text[i+1]
+			check = True
+			break;
+	if(check == True):
+		self.text = s
+		self.text = self.text[1:]
+		print("ILLEGAL_ESCAPE: ", self.text)
+		raise IllegalEscape(self.text) 
+	else:
+		self.text = s
+		self.text = self.text[1:-1]
 };
 
 //For Error in string
-UNCLOSE_STRING: '"' ('\'"')* ( ESC_SEQ | ~[\\"\r\n] )* ('\'"')* 
+UNCLOSE_STRING: '"' ('\'"')* ( ESC_SEQ | ~[\\"] )* ('\'"')* 
 {
-	self.text = self.text.replace('"','',1)
+	self.text = self.text[1:]
+	##print("UNCLOSE_STRING: ", self.text)
 	raise UncloseString(self.text) 
-
 };
-ILLEGAL_ESCAPE: '"' ('\'"')* (~["\\\r\n] | ESC_SEQ | '\'"')* ILL_ESC_SEQ
+
+ILLEGAL_ESCAPE: '"' ('\'"')* (~["\\] | ESC_SEQ | '\'"')* ('\'"')* ILL_ESC_SEQ
 {
-	self.text = self.text.replace('"','',1)
+	self.text = self.text[1:]
+	##print("ILLEGAL_ESCAPE: ", self.text)
 	raise IllegalEscape(self.text) 
 };
+
 //fragment for string literals
-fragment ESC_SEQ:   '\\' ('b'|'f'|'r'|'n'|'t'|'\''|'\\');
-fragment ILL_ESC_SEQ: ('\\' ~([bfnrt\\] | '\'') ) | UNICODE_ESC | OCTAL_ESC;
+fragment ESC_SEQ: '\\' ('b'|'f'|'r'|'n'|'t'|'\''|'\\');
+fragment ILL_ESC_SEQ: ('\\' ~([bfnrt\\] | '\'') ) | UNICODE_ESC | OCTAL_ESC | UNKNOW_ESC;
 fragment OCTAL_ESC:   '\\' ('0'..'3') ('0'..'7') ('0'..'7')
     |   '\\' ('0'..'7') ('0'..'7')
     |   '\\' ('0'..'7');
@@ -189,10 +207,11 @@ fragment UNICODE_ESC:   '\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT ;
 
 fragment HEX_DIGIT : ('0'..'9'|'a'..'f'|'A'..'F') ; 
 
+fragment UNKNOW_ESC: '\\' 'h';
 
 // For arrays in array
 multi_ArrayLIT: Array_word LP array_list RP;
-Array_word: Array;
+Array_word: ARRAY;
 array_list: (arrayLIT array_list_tail)?;
 array_list_tail: (COMA arrayLIT array_list_tail)?;
 // For indexed array
@@ -211,44 +230,41 @@ ele_str_list_tail: (COMA STRINGLIT ele_str_list_tail)?;
 //elements_tail: (COMA elements elements_tail)?;
 
 //Identifiers
-ID: [a-zA-Z_][a-zA-Z0-9_]*
-{
-	print("ID: ", self.text)
-};
+ID: '$'?[a-zA-Z_][a-zA-Z0-9_]*;
 
 //These fragments for Keywords and other uses
-Program: 'Program';
-Main: 'main';
-Break: 'Break';
-Continue: 'Continue';
-If: 'If';
-Elseif: 'Elseif';
-Else: 'Else';
-Foreach: 'Foreach';
-BooleanTrue: 'True';
-BooleanFalse: 'False';
-Array: 'Array';
-In: 'In';
-Int: 'Int';
-Float: 'Float';
-Boolean: 'Boolean';
-String: 'String';
-Return: 'Return';
-Class: 'Class';
-Null: 'Null';
-Val: 'Val';
-Var: 'Var';
-Self: 'Self';
-Constructor: 'Constructor';
-Destructor: 'Destructor';
-KEYWORD_New: 'New';
-By: 'By';
+PROGRAM: 'Program';
+MAIN: 'main';
+BREAK: 'Break';
+CONT: 'Continue';
+IF: 'If';
+ELSEIF: 'Elseif';
+ELSE: 'Else';
+FOREACH: 'Foreach';
+BOOLTRUE: 'True';
+BOOLFALSE: 'False';
+ARRAY: 'Array';
+IN: 'In';
+INT: 'Int';
+FLOAT: 'Float';
+BOOL: 'Boolean';
+STR: 'String';
+RETURN: 'Return';
+CLASS: 'Class';
+NULL: 'Null';
+VAL: 'Val';
+VAR: 'Var';
+SELF: 'Self';
+CONS: 'Constructor';
+DEST: 'Destructor';
+KEYWORD_NEW: 'New';
+BY: 'By';
 //Total Keywords available
-fragment KEYWORD: Break | Continue | If | Elseif | Else |
-| Foreach | BooleanTrue | BooleanFalse | Array | In |
-| Int | Float | Boolean | String | Return |
-| Null | Class | Val | Var |
-| Constructor | Destructor | KEYWORD_New | By ;
+fragment KEYWORD: BREAK | CONT | IF | ELSEIF | ELSE |
+| FOREACH | BOOLTRUE | BOOLFALSE | ARRAY | IN |
+| INT | FLOAT | BOOL | STR | RETURN |
+| NULL | CLASS | VAL | VAR |
+| CONS | DEST | KEYWORD_NEW | BY ;
 
 //These tokens for operators
 ADD_OP: '+';

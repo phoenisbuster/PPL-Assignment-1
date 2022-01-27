@@ -329,5 +329,55 @@ class D96Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by D96Parser#arrayLIT.
+    def visitArrayLIT(self, ctx:D96Parser.ArrayLITContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by D96Parser#elements.
+    def visitElements(self, ctx:D96Parser.ElementsContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by D96Parser#ele_int_list.
+    def visitEle_int_list(self, ctx:D96Parser.Ele_int_listContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by D96Parser#ele_int_list_tail.
+    def visitEle_int_list_tail(self, ctx:D96Parser.Ele_int_list_tailContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by D96Parser#ele_float_list.
+    def visitEle_float_list(self, ctx:D96Parser.Ele_float_listContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by D96Parser#ele_float_list_tail.
+    def visitEle_float_list_tail(self, ctx:D96Parser.Ele_float_list_tailContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by D96Parser#ele_bool_list.
+    def visitEle_bool_list(self, ctx:D96Parser.Ele_bool_listContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by D96Parser#ele_bool_list_tail.
+    def visitEle_bool_list_tail(self, ctx:D96Parser.Ele_bool_list_tailContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by D96Parser#ele_str_list.
+    def visitEle_str_list(self, ctx:D96Parser.Ele_str_listContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by D96Parser#ele_str_list_tail.
+    def visitEle_str_list_tail(self, ctx:D96Parser.Ele_str_list_tailContext):
+        return self.visitChildren(ctx)
+
+
 
 del D96Parser

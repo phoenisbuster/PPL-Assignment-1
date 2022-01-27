@@ -1,1 +1,1 @@
-Array,(,1,,,5,,,7,,,12,),<EOF>
+This is a string containing backspace ,<EOF>

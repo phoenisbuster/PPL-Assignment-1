@@ -1,0 +1,1 @@
+"Teacher1: ","\b\f\rMy students are too lazy"

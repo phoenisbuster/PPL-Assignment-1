@@ -1,1 +1,2 @@
-False,<EOF>
+This is a string containing newline 
+,<EOF>

@@ -1,1 +1,1 @@
-Array,(,"Kangxi",,,"Yongzheng",,,"Qianlong",),<EOF>
+This is a string containing form feed ,<EOF>

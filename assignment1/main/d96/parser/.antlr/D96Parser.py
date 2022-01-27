@@ -345,18 +345,17 @@ class D96Parser ( Parser ):
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "Class_word", "Return_word", "BLOCKCOMMENT", "INTLIT", 
                       "FLOATLIT", "BOOLEANLIT", "STRINGLIT", "UNCLOSE_STRING", 
-                      "ILLEGAL_ESCAPE", "Array_word", "ID", "Program", "Main", 
-                      "Break", "Continue", "If", "Elseif", "Else", "Foreach", 
-                      "BooleanTrue", "BooleanFalse", "Array", "In", "Int", 
-                      "Float", "Boolean", "String", "Return", "Class", "Null", 
-                      "Val", "Var", "Self", "Constructor", "Destructor", 
-                      "KEYWORD_New", "By", "ADD_OP", "SUB_OP", "MUL_OP", 
-                      "DIV_OP", "MOD_OP", "NOT_OP", "AND_OP", "OR_OP", "EQUAL_OP", 
-                      "DIFF_OP", "ASSIGN_OP", "GREATER_OP", "LESSER_OP", 
-                      "GREATER_EQUAL_OP", "LESSER_EQUAL_OP", "STRING_COMP_OP", 
-                      "STRING_CONCAT_OP", "MEMBER_ACCESS_OUT", "LP", "RP", 
-                      "LSB", "RSB", "LB", "RB", "SEMI", "DOT", "COMA", "WS", 
-                      "ERROR_CHAR" ]
+                      "ILLEGAL_ESCAPE", "Array_word", "ID", "PROGRAM", "MAIN", 
+                      "BREAK", "CONT", "IF", "ELSEIF", "ELSE", "FOREACH", 
+                      "BOOLTRUE", "BOOLFALSE", "ARRAY", "IN", "INT", "FLOAT", 
+                      "BOOL", "STR", "RETURN", "CLASS", "NULL", "VAL", "VAR", 
+                      "SELF", "CONS", "DEST", "KEYWORD_NEW", "BY", "ADD_OP", 
+                      "SUB_OP", "MUL_OP", "DIV_OP", "MOD_OP", "NOT_OP", 
+                      "AND_OP", "OR_OP", "EQUAL_OP", "DIFF_OP", "ASSIGN_OP", 
+                      "GREATER_OP", "LESSER_OP", "GREATER_EQUAL_OP", "LESSER_EQUAL_OP", 
+                      "STRING_COMP_OP", "STRING_CONCAT_OP", "MEMBER_ACCESS_OUT", 
+                      "LP", "RP", "LSB", "RSB", "LB", "RB", "SEMI", "DOT", 
+                      "COMA", "WS", "ERROR_CHAR" ]
 
     RULE_program = 0
     RULE_many_class_decl = 1
@@ -469,32 +468,32 @@ class D96Parser ( Parser ):
     ILLEGAL_ESCAPE=12
     Array_word=13
     ID=14
-    Program=15
-    Main=16
-    Break=17
-    Continue=18
-    If=19
-    Elseif=20
-    Else=21
-    Foreach=22
-    BooleanTrue=23
-    BooleanFalse=24
-    Array=25
-    In=26
-    Int=27
-    Float=28
-    Boolean=29
-    String=30
-    Return=31
-    Class=32
-    Null=33
-    Val=34
-    Var=35
-    Self=36
-    Constructor=37
-    Destructor=38
-    KEYWORD_New=39
-    By=40
+    PROGRAM=15
+    MAIN=16
+    BREAK=17
+    CONT=18
+    IF=19
+    ELSEIF=20
+    ELSE=21
+    FOREACH=22
+    BOOLTRUE=23
+    BOOLFALSE=24
+    ARRAY=25
+    IN=26
+    INT=27
+    FLOAT=28
+    BOOL=29
+    STR=30
+    RETURN=31
+    CLASS=32
+    NULL=33
+    VAL=34
+    VAR=35
+    SELF=36
+    CONS=37
+    DEST=38
+    KEYWORD_NEW=39
+    BY=40
     ADD_OP=41
     SUB_OP=42
     MUL_OP=43
@@ -682,11 +681,11 @@ class D96Parser ( Parser ):
             else:
                 return self.getToken(D96Parser.ID, i)
 
-        def Program(self, i:int=None):
+        def PROGRAM(self, i:int=None):
             if i is None:
-                return self.getTokens(D96Parser.Program)
+                return self.getTokens(D96Parser.PROGRAM)
             else:
-                return self.getToken(D96Parser.Program, i)
+                return self.getToken(D96Parser.PROGRAM, i)
 
         def getRuleIndex(self):
             return D96Parser.RULE_class_decl
@@ -705,7 +704,7 @@ class D96Parser ( Parser ):
             self.match(D96Parser.Class_word)
             self.state = 160
             _la = self._input.LA(1)
-            if not(_la==D96Parser.ID or _la==D96Parser.Program):
+            if not(_la==D96Parser.ID or _la==D96Parser.PROGRAM):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -718,7 +717,7 @@ class D96Parser ( Parser ):
                 self.match(D96Parser.T__0)
                 self.state = 162
                 _la = self._input.LA(1)
-                if not(_la==D96Parser.ID or _la==D96Parser.Program):
+                if not(_la==D96Parser.ID or _la==D96Parser.PROGRAM):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
@@ -770,7 +769,7 @@ class D96Parser ( Parser ):
             self.state = 172
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.T__1) | (1 << D96Parser.ID) | (1 << D96Parser.Main) | (1 << D96Parser.Val) | (1 << D96Parser.Var) | (1 << D96Parser.Constructor) | (1 << D96Parser.Destructor))) != 0):
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.T__1) | (1 << D96Parser.ID) | (1 << D96Parser.MAIN) | (1 << D96Parser.VAL) | (1 << D96Parser.VAR) | (1 << D96Parser.CONS) | (1 << D96Parser.DEST))) != 0):
                 self.state = 169
                 self.member()
                 self.state = 170
@@ -816,7 +815,7 @@ class D96Parser ( Parser ):
             self.state = 177
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.T__1) | (1 << D96Parser.ID) | (1 << D96Parser.Main) | (1 << D96Parser.Val) | (1 << D96Parser.Var) | (1 << D96Parser.Constructor) | (1 << D96Parser.Destructor))) != 0):
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.T__1) | (1 << D96Parser.ID) | (1 << D96Parser.MAIN) | (1 << D96Parser.VAL) | (1 << D96Parser.VAR) | (1 << D96Parser.CONS) | (1 << D96Parser.DEST))) != 0):
                 self.state = 174
                 self.member()
                 self.state = 175
@@ -860,12 +859,12 @@ class D96Parser ( Parser ):
             self.state = 181
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [D96Parser.Val, D96Parser.Var]:
+            if token in [D96Parser.VAL, D96Parser.VAR]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 179
                 self.attributes()
                 pass
-            elif token in [D96Parser.T__1, D96Parser.ID, D96Parser.Main, D96Parser.Constructor, D96Parser.Destructor]:
+            elif token in [D96Parser.T__1, D96Parser.ID, D96Parser.MAIN, D96Parser.CONS, D96Parser.DEST]:
                 self.enterOuterAlt(localctx, 2)
                 self.state = 180
                 self.methods()
@@ -899,11 +898,11 @@ class D96Parser ( Parser ):
         def SEMI(self):
             return self.getToken(D96Parser.SEMI, 0)
 
-        def Val(self):
-            return self.getToken(D96Parser.Val, 0)
+        def VAL(self):
+            return self.getToken(D96Parser.VAL, 0)
 
-        def Var(self):
-            return self.getToken(D96Parser.Var, 0)
+        def VAR(self):
+            return self.getToken(D96Parser.VAR, 0)
 
         def ASSIGN_OP(self):
             return self.getToken(D96Parser.ASSIGN_OP, 0)
@@ -927,7 +926,7 @@ class D96Parser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 183
             _la = self._input.LA(1)
-            if not(_la==D96Parser.Val or _la==D96Parser.Var):
+            if not(_la==D96Parser.VAL or _la==D96Parser.VAR):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1117,12 +1116,12 @@ class D96Parser ( Parser ):
             self.state = 209
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [D96Parser.Int, D96Parser.Float, D96Parser.Boolean, D96Parser.String]:
+            if token in [D96Parser.INT, D96Parser.FLOAT, D96Parser.BOOL, D96Parser.STR]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 206
                 self.primitive_Type()
                 pass
-            elif token in [D96Parser.Array]:
+            elif token in [D96Parser.ARRAY]:
                 self.enterOuterAlt(localctx, 2)
                 self.state = 207
                 self.array_Type()
@@ -1150,17 +1149,17 @@ class D96Parser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def Boolean(self):
-            return self.getToken(D96Parser.Boolean, 0)
+        def BOOL(self):
+            return self.getToken(D96Parser.BOOL, 0)
 
-        def Int(self):
-            return self.getToken(D96Parser.Int, 0)
+        def INT(self):
+            return self.getToken(D96Parser.INT, 0)
 
-        def Float(self):
-            return self.getToken(D96Parser.Float, 0)
+        def FLOAT(self):
+            return self.getToken(D96Parser.FLOAT, 0)
 
-        def String(self):
-            return self.getToken(D96Parser.String, 0)
+        def STR(self):
+            return self.getToken(D96Parser.STR, 0)
 
         def getRuleIndex(self):
             return D96Parser.RULE_primitive_Type
@@ -1177,7 +1176,7 @@ class D96Parser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 211
             _la = self._input.LA(1)
-            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.Int) | (1 << D96Parser.Float) | (1 << D96Parser.Boolean) | (1 << D96Parser.String))) != 0)):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.INT) | (1 << D96Parser.FLOAT) | (1 << D96Parser.BOOL) | (1 << D96Parser.STR))) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1197,8 +1196,8 @@ class D96Parser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def Array(self):
-            return self.getToken(D96Parser.Array, 0)
+        def ARRAY(self):
+            return self.getToken(D96Parser.ARRAY, 0)
 
         def LSB(self):
             return self.getToken(D96Parser.LSB, 0)
@@ -1231,13 +1230,13 @@ class D96Parser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 213
-            self.match(D96Parser.Array)
+            self.match(D96Parser.ARRAY)
             self.state = 214
             self.match(D96Parser.LSB)
             self.state = 219
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.Array) | (1 << D96Parser.Int) | (1 << D96Parser.Float) | (1 << D96Parser.Boolean) | (1 << D96Parser.String))) != 0):
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.ARRAY) | (1 << D96Parser.INT) | (1 << D96Parser.FLOAT) | (1 << D96Parser.BOOL) | (1 << D96Parser.STR))) != 0):
                 self.state = 215
                 self.element_type()
                 self.state = 216
@@ -1285,12 +1284,12 @@ class D96Parser ( Parser ):
             self.state = 225
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [D96Parser.Int, D96Parser.Float, D96Parser.Boolean, D96Parser.String]:
+            if token in [D96Parser.INT, D96Parser.FLOAT, D96Parser.BOOL, D96Parser.STR]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 223
                 self.primitive_Type()
                 pass
-            elif token in [D96Parser.Array]:
+            elif token in [D96Parser.ARRAY]:
                 self.enterOuterAlt(localctx, 2)
                 self.state = 224
                 self.array_Type()
@@ -1388,14 +1387,14 @@ class D96Parser ( Parser ):
         def ID(self):
             return self.getToken(D96Parser.ID, 0)
 
-        def Main(self):
-            return self.getToken(D96Parser.Main, 0)
+        def MAIN(self):
+            return self.getToken(D96Parser.MAIN, 0)
 
-        def Constructor(self):
-            return self.getToken(D96Parser.Constructor, 0)
+        def CONS(self):
+            return self.getToken(D96Parser.CONS, 0)
 
-        def Destructor(self):
-            return self.getToken(D96Parser.Destructor, 0)
+        def DEST(self):
+            return self.getToken(D96Parser.DEST, 0)
 
         def getRuleIndex(self):
             return D96Parser.RULE_methods
@@ -1420,7 +1419,7 @@ class D96Parser ( Parser ):
 
             self.state = 234
             _la = self._input.LA(1)
-            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.ID) | (1 << D96Parser.Main) | (1 << D96Parser.Constructor) | (1 << D96Parser.Destructor))) != 0)):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.ID) | (1 << D96Parser.MAIN) | (1 << D96Parser.CONS) | (1 << D96Parser.DEST))) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1737,7 +1736,7 @@ class D96Parser ( Parser ):
             self.state = 268
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.INTLIT) | (1 << D96Parser.FLOATLIT) | (1 << D96Parser.BOOLEANLIT) | (1 << D96Parser.STRINGLIT) | (1 << D96Parser.ID) | (1 << D96Parser.Self) | (1 << D96Parser.KEYWORD_New) | (1 << D96Parser.SUB_OP) | (1 << D96Parser.NOT_OP))) != 0):
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.INTLIT) | (1 << D96Parser.FLOATLIT) | (1 << D96Parser.BOOLEANLIT) | (1 << D96Parser.STRINGLIT) | (1 << D96Parser.ID) | (1 << D96Parser.SELF) | (1 << D96Parser.KEYWORD_NEW) | (1 << D96Parser.SUB_OP) | (1 << D96Parser.NOT_OP))) != 0):
                 self.state = 265
                 self.expr()
                 self.state = 266
@@ -1919,8 +1918,8 @@ class D96Parser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def KEYWORD_New(self):
-            return self.getToken(D96Parser.KEYWORD_New, 0)
+        def KEYWORD_NEW(self):
+            return self.getToken(D96Parser.KEYWORD_NEW, 0)
 
         def ID(self):
             return self.getToken(D96Parser.ID, 0)
@@ -1948,7 +1947,7 @@ class D96Parser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 286
-            self.match(D96Parser.KEYWORD_New)
+            self.match(D96Parser.KEYWORD_NEW)
             self.state = 287
             self.match(D96Parser.ID)
             self.state = 288
@@ -2088,7 +2087,7 @@ class D96Parser ( Parser ):
                 self.state = 304
                 self.match(D96Parser.ID)
                 pass
-            elif token in [D96Parser.Self]:
+            elif token in [D96Parser.SELF]:
                 self.state = 305
                 self.self_word()
                 pass
@@ -2134,8 +2133,8 @@ class D96Parser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def Self(self):
-            return self.getToken(D96Parser.Self, 0)
+        def SELF(self):
+            return self.getToken(D96Parser.SELF, 0)
 
         def getRuleIndex(self):
             return D96Parser.RULE_self_word
@@ -2150,7 +2149,7 @@ class D96Parser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 319
-            self.match(D96Parser.Self)
+            self.match(D96Parser.SELF)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -3309,7 +3308,7 @@ class D96Parser ( Parser ):
             self.state = 470
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.Return_word) | (1 << D96Parser.INTLIT) | (1 << D96Parser.FLOATLIT) | (1 << D96Parser.BOOLEANLIT) | (1 << D96Parser.STRINGLIT) | (1 << D96Parser.ID) | (1 << D96Parser.Break) | (1 << D96Parser.Continue) | (1 << D96Parser.If) | (1 << D96Parser.Foreach) | (1 << D96Parser.Val) | (1 << D96Parser.Var) | (1 << D96Parser.Self) | (1 << D96Parser.SUB_OP) | (1 << D96Parser.NOT_OP) | (1 << D96Parser.LB))) != 0):
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.Return_word) | (1 << D96Parser.INTLIT) | (1 << D96Parser.FLOATLIT) | (1 << D96Parser.BOOLEANLIT) | (1 << D96Parser.STRINGLIT) | (1 << D96Parser.ID) | (1 << D96Parser.BREAK) | (1 << D96Parser.CONT) | (1 << D96Parser.IF) | (1 << D96Parser.FOREACH) | (1 << D96Parser.VAL) | (1 << D96Parser.VAR) | (1 << D96Parser.SELF) | (1 << D96Parser.SUB_OP) | (1 << D96Parser.NOT_OP) | (1 << D96Parser.LB))) != 0):
                 self.state = 467
                 self.stmt()
                 self.state = 468
@@ -3355,7 +3354,7 @@ class D96Parser ( Parser ):
             self.state = 475
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.Return_word) | (1 << D96Parser.INTLIT) | (1 << D96Parser.FLOATLIT) | (1 << D96Parser.BOOLEANLIT) | (1 << D96Parser.STRINGLIT) | (1 << D96Parser.ID) | (1 << D96Parser.Break) | (1 << D96Parser.Continue) | (1 << D96Parser.If) | (1 << D96Parser.Foreach) | (1 << D96Parser.Val) | (1 << D96Parser.Var) | (1 << D96Parser.Self) | (1 << D96Parser.SUB_OP) | (1 << D96Parser.NOT_OP) | (1 << D96Parser.LB))) != 0):
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.Return_word) | (1 << D96Parser.INTLIT) | (1 << D96Parser.FLOATLIT) | (1 << D96Parser.BOOLEANLIT) | (1 << D96Parser.STRINGLIT) | (1 << D96Parser.ID) | (1 << D96Parser.BREAK) | (1 << D96Parser.CONT) | (1 << D96Parser.IF) | (1 << D96Parser.FOREACH) | (1 << D96Parser.VAL) | (1 << D96Parser.VAR) | (1 << D96Parser.SELF) | (1 << D96Parser.SUB_OP) | (1 << D96Parser.NOT_OP) | (1 << D96Parser.LB))) != 0):
                 self.state = 472
                 self.stmt()
                 self.state = 473
@@ -3431,11 +3430,11 @@ class D96Parser ( Parser ):
             return self.getTypedRuleContext(D96Parser.Loop_stmtContext,0)
 
 
-        def Break(self):
-            return self.getToken(D96Parser.Break, 0)
+        def BREAK(self):
+            return self.getToken(D96Parser.BREAK, 0)
 
-        def Continue(self):
-            return self.getToken(D96Parser.Continue, 0)
+        def CONT(self):
+            return self.getToken(D96Parser.CONT, 0)
 
         def return_stmt(self):
             return self.getTypedRuleContext(D96Parser.Return_stmtContext,0)
@@ -3455,35 +3454,35 @@ class D96Parser ( Parser ):
             self.state = 487
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [D96Parser.Val, D96Parser.Var]:
+            if token in [D96Parser.VAL, D96Parser.VAR]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 480
                 self.var_cons_decl()
                 pass
-            elif token in [D96Parser.INTLIT, D96Parser.FLOATLIT, D96Parser.BOOLEANLIT, D96Parser.STRINGLIT, D96Parser.ID, D96Parser.Self, D96Parser.SUB_OP, D96Parser.NOT_OP]:
+            elif token in [D96Parser.INTLIT, D96Parser.FLOATLIT, D96Parser.BOOLEANLIT, D96Parser.STRINGLIT, D96Parser.ID, D96Parser.SELF, D96Parser.SUB_OP, D96Parser.NOT_OP]:
                 self.enterOuterAlt(localctx, 2)
                 self.state = 481
                 self.asm()
                 pass
-            elif token in [D96Parser.If, D96Parser.LB]:
+            elif token in [D96Parser.IF, D96Parser.LB]:
                 self.enterOuterAlt(localctx, 3)
                 self.state = 482
                 self.if_stmt()
                 pass
-            elif token in [D96Parser.Foreach]:
+            elif token in [D96Parser.FOREACH]:
                 self.enterOuterAlt(localctx, 4)
                 self.state = 483
                 self.loop_stmt()
                 pass
-            elif token in [D96Parser.Break]:
+            elif token in [D96Parser.BREAK]:
                 self.enterOuterAlt(localctx, 5)
                 self.state = 484
-                self.match(D96Parser.Break)
+                self.match(D96Parser.BREAK)
                 pass
-            elif token in [D96Parser.Continue]:
+            elif token in [D96Parser.CONT]:
                 self.enterOuterAlt(localctx, 6)
                 self.state = 485
-                self.match(D96Parser.Continue)
+                self.match(D96Parser.CONT)
                 pass
             elif token in [D96Parser.Return_word]:
                 self.enterOuterAlt(localctx, 7)
@@ -3519,11 +3518,11 @@ class D96Parser ( Parser ):
         def SEMI(self):
             return self.getToken(D96Parser.SEMI, 0)
 
-        def Val(self):
-            return self.getToken(D96Parser.Val, 0)
+        def VAL(self):
+            return self.getToken(D96Parser.VAL, 0)
 
-        def Var(self):
-            return self.getToken(D96Parser.Var, 0)
+        def VAR(self):
+            return self.getToken(D96Parser.VAR, 0)
 
         def ASSIGN_OP(self):
             return self.getToken(D96Parser.ASSIGN_OP, 0)
@@ -3547,7 +3546,7 @@ class D96Parser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 489
             _la = self._input.LA(1)
-            if not(_la==D96Parser.Val or _la==D96Parser.Var):
+            if not(_la==D96Parser.VAL or _la==D96Parser.VAR):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -3811,8 +3810,8 @@ class D96Parser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def If(self):
-            return self.getToken(D96Parser.If, 0)
+        def IF(self):
+            return self.getToken(D96Parser.IF, 0)
 
         def expr(self):
             return self.getTypedRuleContext(D96Parser.ExprContext,0)
@@ -3829,8 +3828,8 @@ class D96Parser ( Parser ):
             return self.getTypedRuleContext(D96Parser.Elseif_listContext,0)
 
 
-        def Else(self):
-            return self.getToken(D96Parser.Else, 0)
+        def ELSE(self):
+            return self.getToken(D96Parser.ELSE, 0)
 
         def block_stmt(self):
             return self.getTypedRuleContext(D96Parser.Block_stmtContext,0)
@@ -3850,10 +3849,10 @@ class D96Parser ( Parser ):
             self.state = 529
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [D96Parser.If]:
+            if token in [D96Parser.IF]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 520
-                self.match(D96Parser.If)
+                self.match(D96Parser.IF)
                 self.state = 521
                 self.expr()
                 self.state = 522
@@ -3866,7 +3865,7 @@ class D96Parser ( Parser ):
                 la_ = self._interp.adaptivePredict(self._input,48,self._ctx)
                 if la_ == 1:
                     self.state = 524
-                    self.match(D96Parser.Else)
+                    self.match(D96Parser.ELSE)
                     self.state = 525
                     self.matchStmt()
 
@@ -3895,8 +3894,8 @@ class D96Parser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def If(self):
-            return self.getToken(D96Parser.If, 0)
+        def IF(self):
+            return self.getToken(D96Parser.IF, 0)
 
         def expr(self):
             return self.getTypedRuleContext(D96Parser.ExprContext,0)
@@ -3914,8 +3913,8 @@ class D96Parser ( Parser ):
             return self.getTypedRuleContext(D96Parser.Elseif_listContext,0)
 
 
-        def Else(self):
-            return self.getToken(D96Parser.Else, 0)
+        def ELSE(self):
+            return self.getToken(D96Parser.ELSE, 0)
 
         def unmatchStmt(self):
             return self.getTypedRuleContext(D96Parser.UnmatchStmtContext,0)
@@ -3938,7 +3937,7 @@ class D96Parser ( Parser ):
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 531
-                self.match(D96Parser.If)
+                self.match(D96Parser.IF)
                 self.state = 532
                 self.expr()
                 self.state = 533
@@ -3948,7 +3947,7 @@ class D96Parser ( Parser ):
             elif la_ == 2:
                 self.enterOuterAlt(localctx, 2)
                 self.state = 535
-                self.match(D96Parser.If)
+                self.match(D96Parser.IF)
                 self.state = 536
                 self.expr()
                 self.state = 537
@@ -3961,7 +3960,7 @@ class D96Parser ( Parser ):
                 la_ = self._interp.adaptivePredict(self._input,50,self._ctx)
                 if la_ == 1:
                     self.state = 539
-                    self.match(D96Parser.Else)
+                    self.match(D96Parser.ELSE)
                     self.state = 540
                     self.unmatchStmt()
 
@@ -4074,8 +4073,8 @@ class D96Parser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def Elseif(self):
-            return self.getToken(D96Parser.Elseif, 0)
+        def ELSEIF(self):
+            return self.getToken(D96Parser.ELSEIF, 0)
 
         def if_stmt(self):
             return self.getTypedRuleContext(D96Parser.If_stmtContext,0)
@@ -4094,7 +4093,7 @@ class D96Parser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 555
-            self.match(D96Parser.Elseif)
+            self.match(D96Parser.ELSEIF)
             self.state = 556
             self.if_stmt()
         except RecognitionException as re:
@@ -4112,8 +4111,8 @@ class D96Parser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def Foreach(self):
-            return self.getToken(D96Parser.Foreach, 0)
+        def FOREACH(self):
+            return self.getToken(D96Parser.FOREACH, 0)
 
         def LP(self):
             return self.getToken(D96Parser.LP, 0)
@@ -4121,8 +4120,8 @@ class D96Parser ( Parser ):
         def ID(self):
             return self.getToken(D96Parser.ID, 0)
 
-        def In(self):
-            return self.getToken(D96Parser.In, 0)
+        def IN(self):
+            return self.getToken(D96Parser.IN, 0)
 
         def expr(self, i:int=None):
             if i is None:
@@ -4138,8 +4137,8 @@ class D96Parser ( Parser ):
             return self.getTypedRuleContext(D96Parser.Block_stmtContext,0)
 
 
-        def By(self):
-            return self.getToken(D96Parser.By, 0)
+        def BY(self):
+            return self.getToken(D96Parser.BY, 0)
 
         def getRuleIndex(self):
             return D96Parser.RULE_loop_stmt
@@ -4155,13 +4154,13 @@ class D96Parser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 558
-            self.match(D96Parser.Foreach)
+            self.match(D96Parser.FOREACH)
             self.state = 559
             self.match(D96Parser.LP)
             self.state = 560
             self.match(D96Parser.ID)
             self.state = 561
-            self.match(D96Parser.In)
+            self.match(D96Parser.IN)
             self.state = 562
             self.expr()
             self.state = 563
@@ -4171,9 +4170,9 @@ class D96Parser ( Parser ):
             self.state = 567
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==D96Parser.By:
+            if _la==D96Parser.BY:
                 self.state = 565
-                self.match(D96Parser.By)
+                self.match(D96Parser.BY)
                 self.state = 566
                 self.expr()
 
@@ -4270,7 +4269,7 @@ class D96Parser ( Parser ):
             self.state = 579
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.INTLIT) | (1 << D96Parser.FLOATLIT) | (1 << D96Parser.BOOLEANLIT) | (1 << D96Parser.STRINGLIT) | (1 << D96Parser.ID) | (1 << D96Parser.Self) | (1 << D96Parser.KEYWORD_New) | (1 << D96Parser.SUB_OP) | (1 << D96Parser.NOT_OP))) != 0):
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << D96Parser.INTLIT) | (1 << D96Parser.FLOATLIT) | (1 << D96Parser.BOOLEANLIT) | (1 << D96Parser.STRINGLIT) | (1 << D96Parser.ID) | (1 << D96Parser.SELF) | (1 << D96Parser.KEYWORD_NEW) | (1 << D96Parser.SUB_OP) | (1 << D96Parser.NOT_OP))) != 0):
                 self.state = 578
                 self.expr()
 

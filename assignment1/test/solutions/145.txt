@@ -1,0 +1,1 @@
+FILE,*,file_o,=,fopen,(,filename_o,,,w,),;,<EOF>

@@ -1,1 +1,1 @@
-True,<EOF>
+This is a string containing carriage return ,<EOF>

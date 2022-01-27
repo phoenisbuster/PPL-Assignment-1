@@ -1,1 +1,1 @@
-1234.567,<EOF>
+This is a random string,<EOF>
