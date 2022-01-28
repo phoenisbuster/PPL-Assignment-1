@@ -1,7 +1,6 @@
 
-Class Shape {
-    $getNumOfShape( {
-        Return Self.length * Self.width;
+Class Program {
+    main() {
+        Out.printInt(Shape::$numOfShape);
     }
 }
-        

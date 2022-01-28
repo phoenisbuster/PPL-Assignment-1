@@ -1,1 +1,1 @@
-"Teacher2: ","Just be harder!, like this: \\\\\b\f\r\\\\"
+ "'"Teacher2: '",'"Just be harder!, like this: \\\\\b\f\r\\\\'"" 

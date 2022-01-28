@@ -1,3 +1,7 @@
+/**
+*   Student's Name: Nguyen Dinh Bao Phuc
+*   Student's ID: 1852068
+**/
 grammar D96;
 
 @lexer::header {
@@ -7,129 +11,130 @@ from lexererr import *
 options {
 	language = Python3;
 }
-
-program: many_class_decl EOF;
-many_class_decl: class_decl class_decl_list;
-class_decl_list: (class_decl class_decl_list)?;
-class_decl: Class_word (ID|PROGRAM) (':'(ID|PROGRAM))? LB member_lists RB;
+//Program includes one/many Class (Objects)
+program: class_decl+ EOF;
+class_decl: Class_word (ID|PROGRAM) (':'(ID|PROGRAM))? LB member_lists* RB;
 Class_word: CLASS;
 
-member_lists: (member member_list_tail)?;
-member_list_tail: (member member_list_tail)?;
-member: attributes | methods;
+//Each Class has class's attributes and class's methods
+member_lists: attributes | methods;
 
-attributes: (VAL|VAR) attribute_list ':' types ('=' expr_list)? SEMI;
-attribute_list: attribute_name attribute_list_tail;
-attribute_list_tail: (attribute_name attribute_list_tail)?;
-attribute_name: '$'?ID;
+//This is attribute declaration, which include Types
+attributes: (Var_word | Val_word) attribute_list ':' types ('=' expr_list)? SEMI;
+attribute_list: attribute_name (COMA attribute_name)*;
+attribute_name: ID;
 
+//Types in d96 include: primitive types (int, float, bool, string), array and object(class)
 types: primitive_Type | array_Type | class_type;
-primitive_Type: BOOL | INT | FLOAT | STR;
-array_Type: ARRAY LSB (element_type COMA array_size)? RSB; 
+primitive_Type: Bool_word | Int_word | Float_word | Str_word;
+Bool_word: BOOL;
+Int_word: INT;
+Float_word: FLOAT;
+Str_word: STR;
+array_Type: Array_word LSB (element_type COMA array_size)? RSB; 
+Array_word: ARRAY;
 element_type: primitive_Type | array_Type;
 array_size: INTLIT;
 class_type: ID;
 
-methods: '$'?(ID|MAIN|CONS|DEST) param block_stmt;
-param: LP paramlist RP;
-paramlist: (param_decl paramlist_tail)?;
-paramlist_tail: (SEMI param_decl paramlist_tail)?;
+//This is method declaration, which includes many statements (block stmts)
+methods: (ID|MAIN|CONS|DEST) LP paramlist? RP block_stmt;
+paramlist: param_decl (SEMI param_decl)*;
 param_decl: idlist ':' types;
+//List of ids
+idlist: ID (COMA ID)*;
 
-idlist: ID idlist_tail;
-idlist_tail: (COMA ID idlist_tail)?;
+//This is praser rules for block stmts
+block_stmt: LB block_stmt_list* RB;
+block_stmt_list: stmt | var_cons_decl; //including stmts and variables/constants declaration
 
-expr_list: (expr expr_list_tail)?;
-expr_list_tail: (COMA expr expr_list_tail)?;
-
-expr: 
-class_expr 
-| member_access_out
-| member_access_in
-| index_expr
-| math_expr
-| relational_expr
-| string_expr
-| ID;
-
-class_expr: <assoc=right> KEYWORD_NEW ID LP expr_list RP;
-
-member_access_out: ID MEMBER_ACCESS_OUT '$'?ID (LP expr_list RP)?;
-member_access_in: (ID | self_word) DOT '$'?ID (LP expr_list RP)?;
-self_word: SELF;
-
-index_expr: lower_expr index_operators;
-index_operators: LB lower_expr RB
-| LB lower_expr RB index_operators;
-
-lower_expr: math_expr | relational_expr | string_expr | ID;
-
-math_expr: 
-<assoc=right> SUB_OP math_expr
-| logical_not_expr
-| math_expr MUL_OP math_expr | math_expr DIV_OP math_expr | mod_expr
-| math_expr ADD_OP math_expr | math_expr SUB_OP math_expr
-| logical_expr
-| member_access_out | member_access_in | INTLIT | FLOATLIT | ID;
-
-mod_expr: mod_expr MOD_OP mod_expr 
-| member_access_out | member_access_in | INTLIT | ID;
-
-logical_not_expr: <assoc=right> NOT_OP logical_not_expr
-| member_access_out | member_access_in | BOOLEANLIT | ID;
-
-logical_expr: logical_expr AND_OP logical_expr | logical_expr OR_OP logical_expr
-| member_access_out | member_access_in | BOOLEANLIT | ID;
-
-relational_expr: relational_expr_1 | relational_expr_2;
-relational_expr_1: relational_expr_1 (EQUAL_OP | DIFF_OP ) relational_expr_1 
-| member_access_out | member_access_in | INTLIT | BOOLEANLIT | ID;
-relational_expr_2: relational_expr_2 (GREATER_OP | LESSER_OP | GREATER_EQUAL_OP | LESSER_EQUAL_OP) relational_expr_2
-| member_access_out | member_access_in | INTLIT | FLOATLIT | ID;
-
-string_expr: string_expr (STRING_COMP_OP | STRING_CONCAT_OP) string_expr
-| member_access_out | member_access_in | STRINGLIT | ID;
-
-block_stmt: LB block_stmt_list RB;
-block_stmt_list: (stmt block_stmt_list_tail)?;
-block_stmt_list_tail: (stmt block_stmt_list_tail)?;
-
-stmt: stmt_list SEMI;
-stmt_list: var_cons_decl | asm | if_stmt | loop_stmt | BREAK | CONT | return_stmt;
-
-var_cons_decl: (VAL|VAR) var_cons_list ':' types ('=' expr_list)? SEMI;
-var_cons_list: var_cons_name var_cons_list_tail;
-var_cons_list_tail: (var_cons_name var_cons_list_tail)?;
+//Rules for variables/constants
+var_cons_decl: (Var_word | Val_word) var_cons_list ':' types ('=' expr_list)? SEMI;
+Var_word: VAR;
+Val_word: VAL;
+var_cons_list: var_cons_name (COMA var_cons_name)*;
 var_cons_name: ID;
 
-asm: (ID | index_expr) ASSIGN_OP expr;
+//All type of stmts
+stmt: as_stmt | if_stmt | loop_stmt | break_stmt | cont_stmt | return_stmt | invocation_stmt;
 
-if_stmt : matchStmt
-| unmatchStmt;
-matchStmt: IF expr matchStmt
-(elseif_list)
-(ELSE matchStmt)?
-| block_stmt;
-unmatchStmt: IF expr if_stmt
-| IF expr matchStmt
-(elseif_list)
-(ELSE unmatchStmt)?;
+as_stmt: (ID | index_expr) ASSIGN_OP expr SEMI; //Assignmet stmt
 
-elseif_list: (elseif_stmt elseif_list_tail)?;
-elseif_list_tail: (elseif_stmt elseif_list_tail)?;
-elseif_stmt: ELSEIF if_stmt;
+//If stmt
+if_stmt: (If_word LP expr RP block_stmt) (Elseif_word  LP expr RP block_stmt)* (Else_word block_stmt)?; 
+If_word: IF;
+Else_word: ELSE;
+Elseif_word: ELSEIF;
 
-loop_stmt: FOREACH LP ID IN expr '..' expr (BY expr)? RP block_stmt;
+//Loop (Foreach) stmt
+loop_stmt: Foreach_word LP ID In_word expr '..' expr (By_word expr)? RP block_stmt;
+Foreach_word: FOREACH;
+In_word: IN;
+By_word: BY;
 
-call: ID LB expr_list RB;
+//Instance/static (member_access_in/member_access_out) method invocation
+invocation_stmt: (member_access_in | member_access_out) SEMI;
 
-return_stmt: Return_word (expr)?;
+//Look at the names => rules
+break_stmt: BREAK SEMI;
+cont_stmt: CONT SEMI;
+return_stmt: Return_word (expr)? SEMI;
 Return_word: RETURN;
+
+//Rules for expressions, very complicated
+expr_list: expr (COMA expr)*;
+
+expr: string_expr;
+
+string_expr: relational_expr (STRING_COMP_OP | STRING_CONCAT_OP) relational_expr
+| relational_expr;
+
+relational_expr: logical_expr (EQUAL_OP | DIFF_OP | GREATER_OP | LESSER_OP | GREATER_EQUAL_OP | LESSER_EQUAL_OP) logical_expr 
+| logical_expr;
+
+logical_expr: adding_expr (AND_OP | OR_OP) adding_expr
+| adding_expr;
+
+adding_expr: adding_expr (ADD_OP | SUB_OP) multiplying_expr
+| multiplying_expr;
+
+multiplying_expr: multiplying_expr (MUL_OP | DIV_OP | MOD_OP) logical_not_expr
+| logical_not_expr;
+
+logical_not_expr: NOT_OP logical_not_expr
+| sign_expr;
+
+sign_expr: SUB_OP sign_expr
+| index_expr;
+
+index_expr: index_expr (LSB expr RSB)+
+| member_access_in;
+
+member_access_in: member_access_in DOT member_access_out (LP expr_list? RP)?
+| member_access_out;
+
+member_access_out: class_expr MEMBER_ACCESS_OUT class_expr (LP expr_list? RP)?
+| class_expr;
+
+class_expr: New_word class_expr LP expr_list? RP
+| piority_exp;
+New_word: KEYWORD_NEW;
+
+piority_exp: LP expr RP 
+| operands;
+
+operands: INTLIT | FLOATLIT | BOOLEANLIT | STRINGLIT | arrayLIT | multi_ArrayLIT | ID | self_word;
+self_word: SELF;
 
 /////////////////// Lexer Rules//////////////////////
 
 //Block comment
 BLOCKCOMMENT: '##' .*? '##' -> skip;
+
+//Identifiers
+ID: NORM_ID | SPEC_ID;
+fragment NORM_ID: [a-zA-Z_][a-zA-Z0-9_]*;
+fragment SPEC_ID: '$'[a-zA-Z0-9_]+;
 
 //Describe Interger Literal
 INTLIT: (DECIMAL | OCTAL | HEX | BIN)
@@ -137,26 +142,26 @@ INTLIT: (DECIMAL | OCTAL | HEX | BIN)
 	self.text = self.text.replace('_','')
 };
 
-// For Floating point number
+//For Floating point number
 FLOATLIT: INTERGER_PART (FRACTION  | EXPONENT | FRACTION EXPONENT)
 {
 	self.text = self.text.replace('_','')
-	print("Float: ", self.text)
+	##print("Float: ", self.text)
 };
 fragment INTERGER_PART: DECIMAL;
-fragment EXPONENT: [eE][+-]? INTERGER_PART; 
-fragment FRACTION: (DOT INTERGER_PART)?; 
+fragment EXPONENT: [eE] [+-]? [0-9]+; 
+fragment FRACTION: DOT [0-9]*; 
 
 fragment DECIMAL: ('0') | ([1-9]([0-9]*'_'?[0-9]+)*);
-fragment OCTAL: '0'[0-7_]+;
-fragment HEX: '0'[xX][a-fA-F0-9_]+;
-fragment BIN: '0'[bB][01_]+;
+fragment OCTAL: '0'[0-7][0-7_]*;
+fragment HEX: '0'[xX][A-F0-9][A-F0-9_]*;
+fragment BIN: '0'[bB][01][01_]*;
 
 
-// For Boolean literal
+//For Boolean literal
 BOOLEANLIT: BOOLTRUE | BOOLFALSE;
 
-// For string litteral
+//For string litteral
 STRINGLIT:  '"' ('\'"')* ( ESC_SEQ | ~["] | ('\'"'))* ('\'"')* '"' //'"' ( ESC_SEQ | (~[\\"]) | ('\'"'))* '"'
 {
 	s = ""
@@ -174,7 +179,6 @@ STRINGLIT:  '"' ('\'"')* ( ESC_SEQ | ~["] | ('\'"'))* ('\'"')* '"' //'"' ( ESC_S
 	if(check == True):
 		self.text = s
 		self.text = self.text[1:]
-		print("ILLEGAL_ESCAPE: ", self.text)
 		raise IllegalEscape(self.text) 
 	else:
 		self.text = s
@@ -209,30 +213,17 @@ fragment HEX_DIGIT : ('0'..'9'|'a'..'f'|'A'..'F') ;
 
 fragment UNKNOW_ESC: '\\' 'h';
 
+//This is not lexer rules!!!
 // For arrays in array
-multi_ArrayLIT: Array_word LP array_list RP;
-Array_word: ARRAY;
-array_list: (arrayLIT array_list_tail)?;
-array_list_tail: (COMA arrayLIT array_list_tail)?;
+multi_ArrayLIT: Array_word LP array_list? RP;
+array_list: arrayLIT (COMA arrayLIT)*;
 // For indexed array
- 
-arrayLIT: Array_word LP elements RP;
-elements: (ele_int_list) | (ele_float_list) | (ele_bool_list) | (ele_str_list);
-ele_int_list: (INTLIT ele_int_list_tail)?;
-ele_int_list_tail: (COMA INTLIT ele_int_list_tail)?;
-ele_float_list: (FLOATLIT ele_float_list_tail)?;
-ele_float_list_tail: (COMA FLOATLIT ele_float_list_tail)?;
-ele_bool_list: (BOOLEANLIT ele_bool_list_tail)?;
-ele_bool_list_tail: (COMA BOOLEANLIT ele_bool_list_tail)?;
-ele_str_list: (STRINGLIT ele_str_list_tail)?;
-ele_str_list_tail: (COMA STRINGLIT ele_str_list_tail)?;
-//element_list: (elements elements_tail)?;
-//elements_tail: (COMA elements elements_tail)?;
+arrayLIT: Array_word LP element_list? RP;
+element_list: elements (COMA elements)*;
+elements: expr;
+//This is not lexer rules!!!
 
-//Identifiers
-ID: '$'?[a-zA-Z_][a-zA-Z0-9_]*;
-
-//These fragments for Keywords and other uses
+//These are for Keywords
 PROGRAM: 'Program';
 MAIN: 'main';
 BREAK: 'Break';

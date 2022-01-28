@@ -1,1 +1,1 @@
-Teacher2: ,,,Just be harder!, like this: \\\\\b\f\r\\\\,<EOF>
+'"Teacher2: '",'"Just be harder!, like this: \\\\\b\f\r\\\\'",<EOF>
