@@ -1,0 +1,11 @@
+
+Class Shape {
+    Val $numOfShape: Int = 0;
+    Val immutableAttribute: Int = 0;
+    Var length, width: Int;
+
+    $getNumOfShape() {
+        length = 5000_324234_3312 + -4.0E-15 * 4.14567 / 0xABCD1234 - 01234567 % 0b101010101;
+        If(A[5] != 5){}
+    }
+}

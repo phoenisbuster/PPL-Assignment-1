@@ -13,14 +13,25 @@ options {
 }
 //Program includes one/many Class (Objects)
 program: class_decl+ EOF;
-class_decl: Class_word (ID|PROGRAM) (':'(ID|PROGRAM))? LB member_lists* RB;
+class_decl: Class_word class_name (Colon (ID | Prog_word))? LB member_lists* RB;
+class_name: ID | Prog_word | Class_word | Main_word;
 Class_word: CLASS;
+Prog_word: PROGRAM;
+
+/* 
+Keyword: Main_word | Cons_word | Dest_word
+| Bool_word | Int_word | Float_word | Str_word | Array_word 
+| Var_word | Val_word
+| If_word | Elseif_word | Else_word
+| In_word | By_word | Break_word | Cont_word | Return_word | New_word
+| Self_word;
+*/
 
 //Each Class has class's attributes and class's methods
 member_lists: attributes | methods;
 
 //This is attribute declaration, which include Types
-attributes: (Var_word | Val_word) attribute_list ':' types ('=' expr_list)? SEMI;
+attributes: (Var_word | Val_word) attribute_list Colon types (Assign_op expr_list)? SEMI;
 attribute_list: attribute_name (COMA attribute_name)*;
 attribute_name: ID;
 
@@ -35,12 +46,15 @@ array_Type: Array_word LSB (element_type COMA array_size)? RSB;
 Array_word: ARRAY;
 element_type: primitive_Type | array_Type;
 array_size: INTLIT;
-class_type: ID;
+class_type: class_name;
 
 //This is method declaration, which includes many statements (block stmts)
-methods: (ID|MAIN|CONS|DEST) LP paramlist? RP block_stmt;
+methods: (ID| Main_word | Cons_word | Dest_word) LP paramlist? RP block_stmt;
+Main_word: MAIN;
+Cons_word: CONS;
+Dest_word: DEST;
 paramlist: param_decl (SEMI param_decl)*;
-param_decl: idlist ':' types;
+param_decl: idlist Colon types;
 //List of ids
 idlist: ID (COMA ID)*;
 
@@ -49,7 +63,7 @@ block_stmt: LB block_stmt_list* RB;
 block_stmt_list: stmt | var_cons_decl; //including stmts and variables/constants declaration
 
 //Rules for variables/constants
-var_cons_decl: (Var_word | Val_word) var_cons_list ':' types ('=' expr_list)? SEMI;
+var_cons_decl: (Var_word | Val_word) idlist Colon types (Assign_op expr_list)? SEMI;
 Var_word: VAR;
 Val_word: VAL;
 var_cons_list: var_cons_name (COMA var_cons_name)*;
@@ -58,7 +72,7 @@ var_cons_name: ID;
 //All type of stmts
 stmt: as_stmt | if_stmt | loop_stmt | break_stmt | cont_stmt | return_stmt | invocation_stmt;
 
-as_stmt: (ID | index_expr) ASSIGN_OP expr SEMI; //Assignmet stmt
+as_stmt: index_expr Assign_op expr SEMI; //Assignmet stmt
 
 //If stmt
 if_stmt: (If_word LP expr RP block_stmt) (Elseif_word  LP expr RP block_stmt)* (Else_word block_stmt)?; 
@@ -76,8 +90,10 @@ By_word: BY;
 invocation_stmt: (member_access_in | member_access_out) SEMI;
 
 //Look at the names => rules
-break_stmt: BREAK SEMI;
-cont_stmt: CONT SEMI;
+break_stmt: Break_word SEMI;
+Break_word: BREAK;
+cont_stmt: Cont_word SEMI;
+Cont_word: CONT;
 return_stmt: Return_word (expr)? SEMI;
 Return_word: RETURN;
 
@@ -86,34 +102,34 @@ expr_list: expr (COMA expr)*;
 
 expr: string_expr;
 
-string_expr: relational_expr (STRING_COMP_OP | STRING_CONCAT_OP) relational_expr
+string_expr: relational_expr (String_comp | String_concat) relational_expr
 | relational_expr;
 
-relational_expr: logical_expr (EQUAL_OP | DIFF_OP | GREATER_OP | LESSER_OP | GREATER_EQUAL_OP | LESSER_EQUAL_OP) logical_expr 
+relational_expr: logical_expr (Equal | Diff | Greater | Lesser | Greater_euqal | Lesser_equal) logical_expr 
 | logical_expr;
 
-logical_expr: adding_expr (AND_OP | OR_OP) adding_expr
+logical_expr: adding_expr (And | Or) adding_expr
 | adding_expr;
 
-adding_expr: adding_expr (ADD_OP | SUB_OP) multiplying_expr
+adding_expr: adding_expr (Add | Sub) multiplying_expr
 | multiplying_expr;
 
-multiplying_expr: multiplying_expr (MUL_OP | DIV_OP | MOD_OP) logical_not_expr
+multiplying_expr: multiplying_expr (Mul | Div | Mod) logical_not_expr
 | logical_not_expr;
 
-logical_not_expr: NOT_OP logical_not_expr
+logical_not_expr: Not logical_not_expr
 | sign_expr;
 
-sign_expr: SUB_OP sign_expr
+sign_expr: Sub sign_expr
 | index_expr;
 
 index_expr: index_expr (LSB expr RSB)+
 | member_access_in;
 
-member_access_in: member_access_in DOT member_access_out (LP expr_list? RP)?
+member_access_in: member_access_in Member_access_in member_access_out (LP expr_list? RP)?
 | member_access_out;
 
-member_access_out: class_expr MEMBER_ACCESS_OUT class_expr (LP expr_list? RP)?
+member_access_out: class_expr Member_access_out class_expr (LP expr_list? RP)?
 | class_expr;
 
 class_expr: New_word class_expr LP expr_list? RP
@@ -123,8 +139,29 @@ New_word: KEYWORD_NEW;
 piority_exp: LP expr RP 
 | operands;
 
-operands: INTLIT | FLOATLIT | BOOLEANLIT | STRINGLIT | arrayLIT | multi_ArrayLIT | ID | self_word;
-self_word: SELF;
+operands: INTLIT | FLOATLIT | BOOLEANLIT | STRINGLIT | arrayLIT | multi_ArrayLIT | ID | Self_word | class_name;
+Self_word: SELF;
+
+Add: ADD_OP;
+Sub: SUB_OP;
+Mul: MUL_OP;
+Div: DIV_OP;
+Mod: MOD_OP;
+Not: NOT_OP;
+And: AND_OP;
+Or: OR_OP;
+Assign_op: ASSIGN_OP;
+Equal: EQUAL_OP;
+Diff: DIFF_OP;
+Greater: GREATER_OP;
+Lesser: LESSER_OP;
+Greater_euqal: GREATER_EQUAL_OP;
+Lesser_equal: LESSER_EQUAL_OP;
+String_comp: STRING_COMP_OP;
+String_concat: STRING_CONCAT_OP;
+Member_access_in: DOT;
+Member_access_out: MEMBER_ACCESS_OUT;
+Colon: COLON;
 
 /////////////////// Lexer Rules//////////////////////
 
@@ -223,9 +260,9 @@ element_list: elements (COMA elements)*;
 elements: expr;
 //This is not lexer rules!!!
 
-//These are for Keywords
 PROGRAM: 'Program';
 MAIN: 'main';
+//These are for Keywords
 BREAK: 'Break';
 CONT: 'Continue';
 IF: 'If';
@@ -293,6 +330,8 @@ SEMI: ';';
 DOT: '.';
 
 COMA: ',';
+
+COLON: ':';
 
 WS: [ \t\b\f\r\n]+ -> skip; // skip blanks, tabs, backspaces, form feed, carriage return, newline
 

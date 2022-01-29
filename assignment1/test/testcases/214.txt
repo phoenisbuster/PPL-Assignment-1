@@ -1,0 +1,5 @@
+
+Class Rectangle: Shape {
+    Var My1stCons, My2ndCons: Array[Int, 4] = Array(1, 5, 7, 12);
+    Var $x, $y : Array[String, 4] = Array("Kangxi", "Yongzheng", "Qianlong");
+}

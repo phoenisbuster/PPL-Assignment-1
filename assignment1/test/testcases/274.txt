@@ -1,0 +1,8 @@
+
+Class Shape {
+    $getNumOfShape() {
+        length = Self.Something > Self.Nothing() || Self.Nothing() > Self::Athing();
+        length = Self.Something > Self.Nothing() && Self.Nothing() > Self::Athing();
+        If(A[5] != 5){}
+    }
+}

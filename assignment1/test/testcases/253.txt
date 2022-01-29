@@ -1,0 +1,18 @@
+
+Class Shape {
+    Val $numOfShape: Int = 0;
+    Val immutableAttribute: Int = 0;
+    Var length, width: Int;
+
+    $getNumOfShape() {
+        If(1){
+           If(1){
+               If(1){
+                   Elseif(2){
+                       
+                   }
+               }
+           }
+        }
+    }
+}

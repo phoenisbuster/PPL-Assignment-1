@@ -1,0 +1,8 @@
+
+Class Rectangle: Shape {
+    Val $numOfShape: Int = 0;
+    Val immutableAttribute: Int = 0;
+    Var length, width: Int;
+    Val My1stCons, My2ndCons: Int = 1 + 5, 2;
+    Var $x, $y : Int = 0, 0; 
+}

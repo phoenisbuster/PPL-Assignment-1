@@ -19,6 +19,11 @@ class D96Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by D96Parser#class_name.
+    def visitClass_name(self, ctx:D96Parser.Class_nameContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by D96Parser#member_lists.
     def visitMember_lists(self, ctx:D96Parser.Member_listsContext):
         return self.visitChildren(ctx)
@@ -226,11 +231,6 @@ class D96Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by D96Parser#operands.
     def visitOperands(self, ctx:D96Parser.OperandsContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by D96Parser#self_word.
-    def visitSelf_word(self, ctx:D96Parser.Self_wordContext):
         return self.visitChildren(ctx)
 
 

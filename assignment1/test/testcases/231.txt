@@ -1,0 +1,11 @@
+
+Class Rectangle: Shape {
+    Val $numOfShape: Int = 0;
+    Val immutableAttribute: Int = 0;
+    Var length, width: Int;
+    Val My1stCons, My2ndCons: Array[Int, 4] = Array(1, 5, 7, 12);
+    Var $x, $y : Array[String, 4] = Array("Kangxi", "Yongzheng", "Qianlong");
+    $getArea() {
+        Return Self.length * Self.width;
+    }
+}

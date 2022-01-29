@@ -1,0 +1,6 @@
+
+Class Program {
+    main() {
+        Out.printInt(Shape::$numOfShape);
+    }
+}

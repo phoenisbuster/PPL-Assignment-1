@@ -1,0 +1,7 @@
+
+Class Rectangle: Shape {
+    getArea() {}
+    $getArea() {}
+    Constructor() {}
+    Destructor() {}
+}

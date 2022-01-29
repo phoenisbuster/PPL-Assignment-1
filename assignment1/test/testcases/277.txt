@@ -1,0 +1,6 @@
+
+Class Shape {
+    $getNumOfShape() {
+        If(A[50 + -4 * 4 / 4 - 1 % 7] != Self.Nothing() +. A[Self::Athing()]){}
+    }
+}

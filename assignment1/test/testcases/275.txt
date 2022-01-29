@@ -1,0 +1,7 @@
+
+Class Shape {
+    $getNumOfShape() {
+        length = 50 + -4 * 4 / 4 - 1 % 7 || !Self.Nothing() % -Self.Something;
+        If(A[5] != 5){}
+    }
+}

@@ -1,0 +1,11 @@
+
+Class Shape {
+    $getNumOfShape() {
+        length = Self.Something == Self.Nothing();
+        length = Self.Something != Self.Nothing();
+        length = Self.Something > Self.Nothing();
+        length = Self.Something < Self.Nothing();
+        length = Self.Something >= Self.Nothing();
+        length = Self::Something <= Self.Nothing() == Self.Athing();
+    }
+}

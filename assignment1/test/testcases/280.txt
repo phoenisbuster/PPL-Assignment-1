@@ -1,0 +1,46 @@
+
+Class Shape:Program {
+    Val $numOfShape: Int = 0;
+    Val immutableAttribute: Int = 0;
+    Var length, width: Int;
+
+    $getNumOfShape() {
+        Foreach (i In 1 .. 100 By 2) {
+            Out.printInt(i);
+            Foreach (x In 5 .. 2) {
+                Out.printInt(arr[x]);
+                If(A[5] == 5){
+                    Out.printInt(arr[x]);
+                }
+                Elseif(a*6 > b+4){
+                    Out.printInt(Shape::$numOfShape);
+                }
+                Else{
+                    Out.printInt(Shape.$numOfShape);
+                }
+            }
+        }
+    }
+}
+Class Program{
+    Constructor(){
+        Foreach (i In 1 .. 100 By 2) {
+            Out.printInt(i);
+            Foreach (x In 5 .. 2) {
+                Out.printInt(arr[x]);
+                If(A[5] == 5){
+                    Out.printInt(arr[x]);
+                }
+                Elseif(a*6 > b+4){
+                    Out.printInt(Shape::$numOfShape);
+                }
+                Else{
+                    Out.printInt(Shape.$numOfShape);
+                }
+            }
+        }
+    }
+    Main(){
+        If(A[A[A[Self1.Self2.AnotherSelf::A[New X(5000_324234_3312 + -4.0E-15 * 4.14567 / 0xABCD1234 - 01234567 % 0b101010101 || !Self.Nothing() % -Self.Something, Self.Something || Self.Nothing() + A[Self::Athing()], "Self.Something" +. "Self.Nothing()")]]]] != 5){}
+    }
+}

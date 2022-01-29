@@ -1,0 +1,6 @@
+
+Class Shape {
+    $getNumOfShape() {
+        If(A[A[A[Self1.Self2.AnotherSelf::$A[New X(5000_324234_3312 + -4.0E-15 * 4.14567 / 0xABCD1234 - 01234567 % 0b101010101 || !Self.Nothing() % -Self.Something, Self.Something || Self.Nothing() + A[Self::Athing()], "Self.Something" +. "Self.Nothing()")]]]] != 5){}
+    }
+}

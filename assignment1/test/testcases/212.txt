@@ -1,0 +1,5 @@
+
+Class Rectangle: Shape {
+    Var My1stCons, My2ndCons: Int = 1 + 5, 2;
+    Var $x, $y : Int = 0, 0;
+}

@@ -1,0 +1,47 @@
+
+Class Shape {
+    $LetMakeAStair() {
+        Self.letMakeAStair(True);
+        If(False)
+        {
+            ##do nothing##
+        }
+        Elseif(True)
+        {
+            If((a > b) && (a > c))
+            {
+                ##do nothing}}}}}}##
+            }
+            Else
+            {
+                If((A == B) || (A != C))
+                {
+                    ##
+                    {
+                        do nothing
+                    }##
+                }
+                Else{##do nothing##}
+            }
+                            
+        }
+        Else
+        {
+            If((a > b) && (a > c))
+            {
+                ##do nothing}}}}}}##
+            }
+            Else
+            {
+                If((A == B) || (A != C))
+                {
+                    ##
+                    {
+                        do nothing
+                    }##
+                }
+                Else{##do nothing##}
+            }
+        }
+    }
+}

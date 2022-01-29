@@ -1,0 +1,4 @@
+
+Class Rectangle: Shape {
+    getArea(a,b,c: Int) {}
+}

@@ -1,0 +1,7 @@
+
+Class Shape {
+    $getNumOfShape() {
+        New X("50 + -4 * 4 / 4 - 1 % 7" || !Self.Nothing() % -Self.Something, Self.Something || Self.Nothing() + A[Self::Athing()], "Self.Something" +. "Self.Nothing()");
+        If(A[5] != 5){}
+    }
+}

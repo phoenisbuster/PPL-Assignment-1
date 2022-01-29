@@ -1,5 +1,5 @@
-
-Class Rectangle: Shape {
+Class _932dc {}
+Class _:_:9021{
     getArea() {
         Return Self.length * Self.width;
     }

@@ -1,0 +1,12 @@
+
+Class Rectangle: Shape {
+    Val $numOfShape: Int = 0;
+    Val immutableAttribute: Int = 0;
+    Var length, width: Int;
+    Val My1stCons, My2ndCons: Int = 1 + 5, 2;
+    Var $x, $y : Int = 0, 0; 
+    $getArea() {
+        Return Self.length * Self.width;
+    }
+    _getArea(a,b,c: Int; e,f,g,h: Float; _QWER:Array[Int,3]; My1stCons, My2ndCons: Array[Array[String, 3], 3]) {}
+}

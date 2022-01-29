@@ -1,0 +1,4 @@
+
+Class Rectangle: Shape {
+    getArea(a,b,c: Int, e,f,g,h: Float; _QWER:Array[Int,3]) {}
+}

@@ -1,0 +1,10 @@
+
+Class Rectangle: Shape {
+    getArea() {
+        Var lit, s: Int;
+        lit = 2;
+        Var a, b: Array[Int, 5];
+        s = lit * lit * Self.myPI;
+        a[0] = s;
+    }
+}

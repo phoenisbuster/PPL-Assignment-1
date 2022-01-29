@@ -1,0 +1,4 @@
+
+Class Rectangle: Shape {
+    $_getArea() {}
+}

@@ -1,0 +1,61 @@
+
+Class Character {
+    Val Name: String;
+    Val HP, MP: Int = 100, 100;
+    Val Atk, Def: Float = weapon_atk+base_atk, base_def+bonus_def;
+    Var $luck, critical_dmg: Int = 5, 50;
+
+    Constrctor(Name: Character){
+        Self.Name = Name::Name;
+    }
+
+    $getSpecialAbility(SkillName, Effect: String; Stat: Float; Cost: Int){
+        Self.SkillName = SkillName;
+        Self.Effect = Effect;
+        Self.Stat = Stat;
+        Self.Cost = Cost;
+        Return Self.Name::PerformSkill(Self.Stat, Self.Cost);
+    }
+
+    PerformSkill(Dmg: Float; Cost: Int){
+        Self.MP = Self.MP - Cost;
+        Return Dmg;
+    }
+}
+Class Cloud_Strife:Charracter{
+    Val Name: String; 
+    Constrctor(){
+        Self.Name = "Cloud";
+        Self.SkillName = "Counter Attack";
+        Self.Effect = "Yolo I don't know OK!!!";
+        Self.Dmg = 20;
+        Self.Cost = 10;
+    }
+}
+Class Tifa_Lockhart:Charracter{
+    Val Name: String; 
+    Constrctor(){
+        Self.Name = "Tifa";
+        Self.SkillName = "Dance of Warth";
+        Self.Effect = "Judgement Cut + Fiora's ulti???";
+        Self.Dmg = 10 * 5;
+        Self.Cost = 7 * 5;
+    }
+}
+Class Aerith_Gainsborough:Charracter{
+    Val Name: String; 
+    Constrctor(){
+        Self.Name = "Aerith";
+        Self.SkillName = "Rays of judgement";
+        Self.Effect = "Lux's ulti in URF";
+        Self.Dmg = 45;
+        Self.Cost = 45;
+    }
+}
+Class Program{
+    Main(){
+        PhoeniS = New Tifa_Lockhart();
+        PhoeniS.getSpecialAbility(PhoeniS.SkillName, PhoeniS.Effect, PhoeniS.Dmg, PhoeniS.Cost);
+        Out.print(PhoeniS.Name, PhoeniS.SkillName, PhoeniS.MP);
+    }
+}

@@ -1,1 +1,6 @@
-CLass main {}
+Class _932dc {}
+Class 9021{
+    getArea() {
+        Return Self.length * Self.width;
+    }
+}

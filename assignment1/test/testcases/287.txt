@@ -1,0 +1,24 @@
+
+Class Character {
+    Val Name: String;
+    Val HP, MP: Int = 100, 100;
+    Val Atk, Def: Float = weapon_atk+base_atk, base_def+bonus_def;
+    Var $luck, critical_dmg: Int = 5, 50;
+
+    Constrctor(Name: Character){
+        Self.Name = Name;
+    }
+
+    $getSpecialAbility(SkillName, Effect: String; Stat: Float; Cost: Int){
+        Self.SkillName = SkillName;
+        Self.Effect = Effect;
+        Self.Stat = Stat;
+        Self.Cost = Cost;
+        Return Self.Name::PerformSkill(Self.Stat, Self.Cost);
+    }
+
+    PerformSkill(Dmg: Float; Cost: Int){
+        Self.MP = Self.MP - Cost;
+        Return Dmg;
+    }
+}

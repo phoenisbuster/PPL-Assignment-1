@@ -1,6 +1,7 @@
-
-Class Shape {
-    $getNumOfShape( {
+Class _932dc {}
+Class _9021{
+    getArea() {
         Return Self.length * Self.width;
     }
 }
+Class Program:_9021{}

@@ -1,0 +1,35 @@
+
+Class Shape {
+    HorrorSence() {
+        If(You::goDown(floor4))
+        {
+            If(You::goDown(floor3))
+            {
+                If(You::goDown(floor2))
+                {
+                    If(You::goDown(floor1))
+                    {
+                        If(You::goDown(basement))
+                        {
+                            Out.print("Hello Annabelle!");
+                        }
+                        Else{
+                            You::goUp();
+                        }
+                    }
+                    Else{
+                        You::goUp();
+                    }
+                Else{
+                    You::goUp();
+                }
+            }
+            Else{
+                Out.print("You shouldn't go to the basement :)))");
+            }
+        }
+        Else{
+            Out.print("Thieu thieu cai gi do :v");
+        }                      
+    }
+}

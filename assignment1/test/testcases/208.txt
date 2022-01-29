@@ -1,15 +1,11 @@
-
-Class Shape {
-    Val $numOfShape: Int = 0;
-    Val immutableAttribute: Int = 0;
-    Var length, width: Int;
-
-    $getNumOfShape() {
-        Foreach (i In 1 .. 100 By 2) {
-            Out.printInt(i);
-        }
-        Foreach (x In 5 .. 2) {
-            Out.printInt(arr[x]);
-        }
+Class _932dc:Program {}
+Class _9021{
+    getArea() {
+        Return Self.length * Self.width;
     }
 }
+Class Program{
+    main(){}
+    Main(){}
+}
+Class Abc:Program

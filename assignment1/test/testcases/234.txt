@@ -1,0 +1,8 @@
+
+Class Rectangle: Shape {
+    Val My1stCons, My2ndCons: Array[Array[String, 3], 3] = Array (Array("Volvo", "22", "18"),Array("Saab", "5", "2"),Array("Land Rover", "17", "15"));
+    Var $x, $y : Array[String, 4] = Array("Kangxi", "Yongzheng", "Qianlong")
+    $getArea() {
+        Return Self.length * Self.width;
+    }
+}
